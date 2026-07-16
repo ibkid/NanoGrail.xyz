@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nanograil — proof you're human</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Josefin+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B0E13;
+  --panel:#121620;
+  --panel-2:#171C28;
+  --brass:#C9A15C;
+  --brass-bright:#EBCB84;
+  --brass-dim:#8A6F3E;
+  --bone:#EDE4D3;
+  --bone-dim:#9B937F;
+  --verify:#4FBE8B;
+  --burn:#C96A5C;
+  --line:rgba(201,161,92,.22);
+  --line-soft:rgba(201,161,92,.12);
+  --mono:'Space Mono',monospace;
+  --body:'Josefin Sans',sans-serif;
+  --display:'Poiret One',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  color:var(--bone);
+  font-family:var(--body);
+  font-weight:300;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% -5%, rgba(201,161,92,.08), transparent 60%),
+    repeating-linear-gradient(0deg, transparent 0 3px, rgba(255,255,255,.004) 3px 4px);
+  pointer-events:none;z-index:0;
+}
+::selection{background:var(--brass);color:var(--ink)}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+/* ---------- nav ---------- */
+nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(11,14,19,.82);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line-soft);
+}
+.nav-inner{
+  max-width:1120px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.logo{display:flex;align-items:center;gap:12px}
+.logo svg{width:34px;height:34px}
+.logo-name{
+  font-family:var(--display);font-size:1.35rem;letter-spacing:.22em;
+  color:var(--brass-bright);text-transform:uppercase;
+}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;
+  color:var(--bone-dim);text-transform:lowercase;transition:color .2s;
+}
+.nav-links a:hover,.nav-links a:focus-visible{color:var(--brass-bright)}
+.btn{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;
+  padding:10px 20px;border:1px solid var(--brass);
+  background:transparent;color:var(--brass-bright);
+  transition:background .2s,color .2s;
+  text-transform:lowercase;
+}
+.btn:hover,.btn:focus-visible{background:var(--brass);color:var(--ink)}
+.btn.solid{background:var(--brass);color:var(--ink)}
+.btn.solid:hover{background:var(--brass-bright);border-color:var(--brass-bright)}
+:focus-visible{outline:2px solid var(--brass-bright);outline-offset:3px}
+
+/* ---------- hero ---------- */
+.hero{padding:88px 0 64px;text-align:center;position:relative}
+.deco-rule{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  margin:0 auto 28px;color:var(--brass-dim);
+}
+.deco-rule::before,.deco-rule::after{
+  content:'';height:1px;width:72px;
+  background:linear-gradient(90deg,transparent,var(--brass-dim));
+}
+.deco-rule::after{background:linear-gradient(90deg,var(--brass-dim),transparent)}
+.eyebrow{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.28em;
+  color:var(--brass);text-transform:lowercase;
+}
+.hero h1{
+  font-family:var(--display);
+  font-size:clamp(2.4rem,6.4vw,4.6rem);
+  letter-spacing:.08em;line-height:1.14;
+  color:var(--bone);font-weight:400;
+  max-width:880px;margin:0 auto 22px;
+}
+.hero h1 em{font-style:normal;color:var(--brass-bright)}
+.hero .sub{
+  max-width:560px;margin:0 auto 36px;
+  color:var(--bone-dim);font-size:1.05rem;
+}
+.hero-medallion{margin:0 auto 34px;width:min(220px,52vw);position:relative}
+.hero-medallion svg{width:100%;height:auto;display:block}
+.spin-slow{transform-origin:50% 50%;animation:spin 40s linear infinite}
+.spin-rev{transform-origin:50% 50%;animation:spinrev 60s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes spinrev{to{transform:rotate(-360deg)}}
+.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
+.chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.chip{
+  font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;
+  padding:7px 14px;border:1px solid var(--line);
+  color:var(--bone-dim);display:flex;align-items:center;gap:8px;
+}
+.chip .dot{width:6px;height:6px;background:var(--verify);border-radius:50%;
+  animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ---------- ticker ---------- */
+.ticker-band{
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:var(--panel);overflow:hidden;position:relative;
+}
+.ticker-label{
+  position:absolute;left:0;top:0;bottom:0;z-index:2;
+  display:flex;align-items:center;gap:8px;padding:0 18px;
+  background:var(--ink);border-right:1px solid var(--line);
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;color:var(--verify);
+  white-space:nowrap;
+}
+.ticker-label .dot{width:7px;height:7px;border-radius:50%;background:var(--verify);animation:pulse 1.6s infinite}
+.ticker-track{
+  display:flex;gap:0;white-space:nowrap;
+  animation:marquee 45s linear infinite;padding:13px 0;will-change:transform;
+}
+.ticker-band:hover .ticker-track{animation-play-state:paused}
+@keyframes marquee{to{transform:translateX(-50%)}}
+.tick{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;
+  color:var(--bone-dim);padding:0 26px;display:inline-flex;gap:10px;align-items:center;
+}
+.tick b{color:var(--bone);font-weight:400}
+.tick .chain{color:var(--brass)}
+.tick::after{content:'◆';color:var(--brass-dim);margin-left:26px;font-size:.5rem}
+
+/* ---------- sections ---------- */
+section{padding:88px 0}
+.sec-head{text-align:center;margin-bottom:56px}
+.sec-head h2{
+  font-family:var(--display);font-size:clamp(1.7rem,3.6vw,2.6rem);
+  letter-spacing:.1em;color:var(--bone);font-weight:400;margin-top:16px;
+}
+.sec-head p{color:var(--bone-dim);max-width:520px;margin:14px auto 0}
+
+/* live feed */
+.feed-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:start}
+.feed-panel{
+  background:var(--panel);border:1px solid var(--line);
+  padding:0;overflow:hidden;
+}
+.feed-panel-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 20px;border-bottom:1px solid var(--line-soft);
+}
+.feed-panel-head span{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;color:var(--brass)}
+.feed-panel-head .live{color:var(--verify);display:flex;align-items:center;gap:8px}
+.feed-panel-head .live::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--verify);animation:pulse 1.6s infinite}
+.feed-list{list-style:none;max-height:392px;overflow:hidden}
+.feed-row{
+  display:grid;grid-template-columns:38px 1fr auto;gap:14px;align-items:center;
+  padding:13px 20px;border-bottom:1px solid var(--line-soft);
+  animation:rowin .5s ease both;
+}
+@keyframes rowin{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.feed-row .glyph{
+  width:38px;height:38px;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--display);color:var(--brass-bright);font-size:1.05rem;
+  background:var(--panel-2);
+}
+.feed-row .meta{min-width:0}
+.feed-row .meta b{display:block;font-weight:400;color:var(--bone);font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.feed-row .meta span{font-family:var(--mono);font-size:.64rem;color:var(--bone-dim);letter-spacing:.08em}
+.feed-row .when{font-family:var(--mono);font-size:.62rem;color:var(--brass-dim);letter-spacing:.08em;text-align:right}
+.feed-row .when em{display:block;font-style:normal;color:var(--verify)}
+
+.stat-stack{display:flex;flex-direction:column;gap:16px}
+.stat-card{background:var(--panel);border:1px solid var(--line);padding:22px 24px}
+.stat-card .lab{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;color:var(--bone-dim);text-transform:lowercase}
+.stat-card .val{font-family:var(--display);font-size:2.2rem;color:var(--brass-bright);letter-spacing:.06em;line-height:1.15;margin-top:6px}
+.stat-card .note{font-family:var(--mono);font-size:.62rem;color:var(--bone-dim);margin-top:6px;letter-spacing:.06em}
+.stat-card .note.up{color:var(--verify)}
+
+/* mechanics */
+.mech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.mech-card{
+  background:var(--panel);border:1px solid var(--line);padding:34px 28px;
+  position:relative;transition:border-color .25s, transform .25s;
+}
+.mech-card:hover{border-color:var(--brass);transform:translateY(-4px)}
+.mech-card .sun{margin-bottom:22px}
+.mech-card .sun svg{width:52px;height:52px}
+.mech-card h3{
+  font-family:var(--display);font-size:1.3rem;letter-spacing:.1em;
+  color:var(--bone);font-weight:400;margin-bottom:12px;
+}
+.mech-card p{color:var(--bone-dim);font-size:.95rem}
+.mech-card p b{color:var(--brass-bright);font-weight:400}
+
+/* checkin demo */
+.checkin-shell{
+  background:var(--panel);border:1px solid var(--line);
+  padding:44px;display:grid;grid-template-columns:1fr 320px;gap:44px;align-items:center;
+}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;margin-top:26px}
+.day{
+  aspect-ratio:1;border:1px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  background:var(--panel-2);position:relative;
+}
+.day .d-lab{font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;color:var(--bone-dim)}
+.day .d-mark{font-size:1.05rem;line-height:1}
+.day.claimed{border-color:var(--brass)}
+.day.claimed .d-mark{color:var(--brass-bright)}
+.day.claimed .d-lab{color:var(--brass)}
+.day.missed{border-color:rgba(201,106,92,.5);background:repeating-linear-gradient(45deg,var(--panel-2) 0 6px,rgba(201,106,92,.06) 6px 12px)}
+.day.missed .d-mark{color:var(--burn)}
+.day.today{border-color:var(--verify);box-shadow:0 0 0 1px var(--verify) inset}
+.day.today .d-lab{color:var(--verify)}
+.day.future{opacity:.35}
+.checkin-side{text-align:center;border-left:1px solid var(--line-soft);padding-left:44px}
+.balance-lab{font-family:var(--mono);font-size:.62rem;letter-spacing:.22em;color:var(--bone-dim)}
+.balance{font-family:var(--display);font-size:2.6rem;color:var(--brass-bright);letter-spacing:.04em;margin:8px 0 4px}
+.balance small{font-size:1.1rem;color:var(--brass)}
+.streak-lab{font-family:var(--mono);font-size:.64rem;color:var(--verify);letter-spacing:.12em;margin-bottom:22px;display:block}
+#checkinBtn{width:100%;padding:15px 0;font-size:.78rem}
+#checkinBtn:disabled{opacity:.55;cursor:default;background:transparent;color:var(--brass)}
+.checkin-note{font-family:var(--mono);font-size:.6rem;color:var(--bone-dim);margin-top:14px;letter-spacing:.06em;line-height:1.7}
+.checkin-note em{color:var(--burn);font-style:normal}
+.claim-flash{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:.7rem;color:var(--verify);
+  background:rgba(11,14,19,.86);opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.claim-flash.show{opacity:1}
+
+/* genesis */
+.genesis{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.gen-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.gen-count{font-family:var(--display);font-size:clamp(3.2rem,7vw,5.4rem);color:var(--brass-bright);letter-spacing:.04em;line-height:1}
+.gen-count small{font-size:.36em;color:var(--bone-dim);letter-spacing:.12em}
+.bar{height:10px;border:1px solid var(--line);margin:26px 0 12px;background:var(--ink);position:relative}
+.bar-fill{
+  height:100%;width:0;
+  background:linear-gradient(90deg,var(--brass-dim),var(--brass-bright));
+  transition:width 1.6s cubic-bezier(.2,.8,.2,1);
+}
+.bar-meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.62rem;color:var(--bone-dim);letter-spacing:.1em}
+.gen-points{list-style:none;display:flex;flex-direction:column;gap:18px}
+.gen-points li{display:flex;gap:16px;align-items:flex-start;color:var(--bone-dim);font-size:.98rem}
+.gen-points li b{color:var(--bone);font-weight:400}
+.gen-points .pip{
+  flex:none;width:26px;height:26px;border:1px solid var(--brass);transform:rotate(45deg);
+  display:flex;align-items:center;justify-content:center;margin-top:2px;
+}
+.gen-points .pip span{transform:rotate(-45deg);font-family:var(--mono);font-size:.6rem;color:var(--brass-bright)}
+
+/* ethos */
+.ethos-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.ethos-copy h2{font-family:var(--display);font-size:clamp(1.7rem,3.4vw,2.4rem);letter-spacing:.1em;font-weight:400;margin:16px 0 18px}
+.ethos-copy p{color:var(--bone-dim);margin-bottom:16px}
+.ethos-copy p b{color:var(--brass-bright);font-weight:400}
+.rep-panel{background:var(--panel);border:1px solid var(--line);padding:36px}
+.rep-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line-soft);font-family:var(--mono);font-size:.72rem;letter-spacing:.08em}
+.rep-row:last-child{border-bottom:none}
+.rep-row .who{color:var(--bone)}
+.rep-row .score{color:var(--brass-bright)}
+.rep-row .tag{font-size:.6rem;padding:4px 10px;border:1px solid var(--verify);color:var(--verify);letter-spacing:.14em}
+.rep-row .tag.bot{border-color:var(--burn);color:var(--burn)}
+.rep-head{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;color:var(--bone-dim);margin-bottom:10px;display:flex;justify-content:space-between}
+
+/* nano */
+.nano-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.nano-card{border:1px solid var(--line);padding:28px 24px;background:var(--panel)}
+.nano-card .g{font-family:var(--display);font-size:1.5rem;color:var(--brass-bright);margin-bottom:12px}
+.nano-card h4{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;color:var(--bone);font-weight:400;margin-bottom:10px;text-transform:lowercase}
+.nano-card p{color:var(--bone-dim);font-size:.86rem}
+
+/* cta + footer */
+.final{text-align:center;border-top:1px solid var(--line)}
+.final h2{font-family:var(--display);font-size:clamp(2rem,5vw,3.4rem);letter-spacing:.08em;font-weight:400;margin:20px 0 14px}
+.final p{color:var(--bone-dim);max-width:480px;margin:0 auto 34px}
+footer{border-top:1px solid var(--line);padding:34px 0;background:var(--panel)}
+.foot-inner{max-width:1120px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.foot-inner .fine{font-family:var(--mono);font-size:.6rem;color:var(--bone-dim);letter-spacing:.1em}
+.foot-links{display:flex;gap:22px}
+.foot-links a{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;color:var(--bone-dim)}
+.foot-links a:hover{color:var(--brass-bright)}
+
+/* reveal on scroll */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+@media (max-width:920px){
+  .feed-grid,.gen-grid,.ethos-grid,.checkin-shell{grid-template-columns:1fr}
+  .checkin-side{border-left:none;border-top:1px solid var(--line-soft);padding-left:0;padding-top:34px}
+  .mech-grid{grid-template-columns:1fr}
+  .nano-grid{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+}
+@media (max-width:520px){
+  .nano-grid{grid-template-columns:1fr}
+  .checkin-shell{padding:28px 20px}
+  section{padding:64px 0}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#top" aria-label="nanograil home">
+      <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <circle cx="24" cy="24" r="22" stroke="#C9A15C" stroke-width="1.5"/>
+        <circle cx="24" cy="24" r="16" stroke="#C9A15C" stroke-width="0.8" opacity=".6"/>
+        <path d="M24 6 L28 24 L24 42 L20 24 Z" fill="#EBCB84"/>
+        <path d="M6 24 L24 20 L42 24 L24 28 Z" fill="#C9A15C" opacity=".7"/>
+        <circle cx="24" cy="24" r="3" fill="#0B0E13" stroke="#EBCB84" stroke-width="1"/>
+      </svg>
+      <span class="logo-name">Nanograil</span>
+    </a>
+    <div class="nav-links">
+      <a href="#feed">live mints</a>
+      <a href="#mechanics">how it works</a>
+      <a href="#genesis">genesis</a>
+      <a href="#ethos">ethos</a>
+      <a href="#nano">$nano</a>
+    </div>
+    <button class="btn" id="connectBtn">connect wallet</button>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="deco-rule"><span class="eyebrow">built on base · powered by vibestarter</span></div>
+
+    <div class="hero-medallion" aria-hidden="true">
+      <svg viewBox="0 0 240 240" fill="none">
+        <g class="spin-slow">
+          <circle cx="120" cy="120" r="112" stroke="#8A6F3E" stroke-width="1" opacity=".5"/>
+          <g stroke="#C9A15C" stroke-width="1" opacity=".55">
+            <line x1="120" y1="4" x2="120" y2="20"/><line x1="120" y1="220" x2="120" y2="236"/>
+            <line x1="4" y1="120" x2="20" y2="120"/><line x1="220" y1="120" x2="236" y2="120"/>
+            <line x1="38" y1="38" x2="49" y2="49"/><line x1="191" y1="191" x2="202" y2="202"/>
+            <line x1="202" y1="38" x2="191" y2="49"/><line x1="49" y1="191" x2="38" y2="202"/>
+          </g>
+        </g>
+        <g class="spin-rev">
+          <circle cx="120" cy="120" r="88" stroke="#C9A15C" stroke-width="1" opacity=".7" stroke-dasharray="4 8"/>
+        </g>
+        <circle cx="120" cy="120" r="72" stroke="#C9A15C" stroke-width="1.5"/>
+        <circle cx="120" cy="120" r="64" stroke="#8A6F3E" stroke-width=".7"/>
+        <path d="M120 58 L132 120 L120 182 L108 120 Z" fill="#EBCB84"/>
+        <path d="M58 120 L120 108 L182 120 L120 132 Z" fill="#C9A15C" opacity=".75"/>
+        <path d="M84 84 L120 112 L156 84 L128 120 L156 156 L120 128 L84 156 L112 120 Z" fill="#8A6F3E" opacity=".5"/>
+        <circle cx="120" cy="120" r="9" fill="#0B0E13" stroke="#EBCB84" stroke-width="1.5"/>
+        <circle cx="120" cy="120" r="3" fill="#EBCB84"/>
+      </svg>
+    </div>
+
+    <h1>an nft reputation protocol for detecting <em>real humans</em> in the age of bots</h1>
+    <p class="sub">mint your grail. hold it in your wallet. check in every day to prove you're still on the other side of the screen — and stack $nano for it.</p>
+
+    <div class="hero-ctas">
+      <button class="btn solid" onclick="document.getElementById('genesis').scrollIntoView({behavior:'smooth'})">mint genesis · 500</button>
+      <button class="btn" onclick="document.getElementById('mechanics').scrollIntoView({behavior:'smooth'})">read the mechanics</button>
+    </div>
+
+    <div class="chips">
+      <span class="chip"><span class="dot"></span>ethos network sybil resistance</span>
+      <span class="chip">$nano utility token</span>
+      <span class="chip">base mainnet</span>
+      <span class="chip">vibestarter launch</span>
+    </div>
+  </div>
+</header>
+
+<div class="ticker-band" aria-label="live mint ticker">
+  <div class="ticker-label"><span class="dot"></span>live mints</div>
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<section id="feed">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="deco-rule"><span class="eyebrow">the world is minting</span></div>
+      <h2>Daily Mint Feed</h2>
+      <p>a live pulse of nft mints happening across the ecosystem, updating in real time. bots mint fast — humans mint here.</p>
+    </div>
+    <div class="feed-grid">
+      <div class="feed-panel reveal">
+        <div class="feed-panel-head">
+          <span>recent mints · all chains</span>
+          <span class="live">streaming</span>
+        </div>
+        <ul class="feed-list" id="feedList"></ul>
+      </div>
+      <div class="stat-stack reveal">
+        <div class="stat-card">
+          <div class="lab">mints tracked today</div>
+          <div class="val" id="statMints">—</div>
+          <div class="note up" id="statMintsNote">updating live</div>
+        </div>
+        <div class="stat-card">
+          <div class="lab">est. unique wallets</div>
+          <div class="val" id="statWallets">—</div>
+          <div class="note">across tracked collections</div>
+        </div>
+        <div class="stat-card">
+          <div class="lab">suspected bot mints filtered</div>
+          <div class="val" id="statBots">—</div>
+          <div class="note" style="color:var(--burn)">flagged via reputation signals</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="mechanics" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="deco-rule"><span class="eyebrow">the ritual</span></div>
+      <h2>Hold. Check In. Earn.</h2>
+      <p>no lockups, no staking contracts to babysit. your grail stays in your wallet the whole time.</p>
+    </div>
+    <div class="mech-grid">
+      <div class="mech-card reveal">
+        <div class="sun"><svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="24" stroke="#C9A15C"/><path d="M26 8 L30 26 L26 44 L22 26 Z" fill="#EBCB84"/><circle cx="26" cy="26" r="3" fill="#0B0E13" stroke="#EBCB84"/></svg></div>
+        <h3>Mint & Hold</h3>
+        <p>mint from the <b>genesis 500</b> and keep the nft in your wallet. holding is your ticket in — the grail is your onchain identity badge.</p>
+      </div>
+      <div class="mech-card reveal">
+        <div class="sun"><svg viewBox="0 0 52 52" fill="none"><rect x="10" y="10" width="32" height="32" stroke="#C9A15C"/><path d="M18 27 L24 33 L35 20" stroke="#EBCB84" stroke-width="2.5" stroke-linecap="square"/></svg></div>
+        <h3>Daily Check-In</h3>
+        <p>tap in once a day to claim that day's <b>$nano reward</b>. one small human ritual, every 24 hours. bots don't show up — you do.</p>
+      </div>
+      <div class="mech-card reveal">
+        <div class="sun"><svg viewBox="0 0 52 52" fill="none"><path d="M26 6 C26 6 14 20 14 30 a12 12 0 0 0 24 0 C38 20 26 6 26 6 Z" stroke="#C96A5C"/><path d="M26 22 C26 22 21 28 21 32 a5 5 0 0 0 10 0 C31 28 26 22 26 22 Z" fill="#C96A5C" opacity=".5"/></svg></div>
+        <h3>Miss = No Reward</h3>
+        <p>skip a day and that day's reward is gone — <b>no reward for missed check-ins</b>, no retroactive claims. consistency is the whole game.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="checkin-shell reveal">
+      <div>
+        <div class="deco-rule" style="justify-content:flex-start"><span class="eyebrow">demo · your week</span></div>
+        <h2 style="font-family:var(--display);font-weight:400;letter-spacing:.1em;font-size:1.8rem;margin-top:14px">The Check-In Ledger</h2>
+        <p style="color:var(--bone-dim);margin-top:12px;max-width:440px">this is what your week looks like as a holder. gold days are claimed. the hatched day? that reward is gone forever. today is waiting on you.</p>
+        <div class="week" id="weekGrid"></div>
+      </div>
+      <div class="checkin-side" style="position:relative">
+        <span class="balance-lab">your $nano balance</span>
+        <div class="balance"><span id="nanoBal">62.5</span> <small>$NANO</small></div>
+        <span class="streak-lab" id="streakLab">◆ 3-day streak</span>
+        <button class="btn solid" id="checkinBtn">check in · claim 12.5 $nano</button>
+        <p class="checkin-note">rewards claimable once per day per held grail.<br><em>missed days are forfeit — no reward.</em></p>
+        <div class="claim-flash" id="claimFlash">+12.5 $NANO CLAIMED ◆ HUMAN VERIFIED</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="genesis" id="genesis">
+  <div class="wrap">
+    <div class="gen-grid">
+      <div class="reveal">
+        <div class="deco-rule" style="justify-content:flex-start"><span class="eyebrow">genesis collection</span></div>
+        <div class="gen-count" style="margin-top:18px"><span id="mintCount">0</span><small> / 500 MINTED</small></div>
+        <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="500" aria-valuenow="173" aria-label="genesis mint progress"><div class="bar-fill" id="barFill"></div></div>
+        <div class="bar-meta"><span>genesis mint · live</span><span id="barPct">0%</span></div>
+      </div>
+      <ul class="gen-points reveal">
+        <li><span class="pip"><span>500</span></span><div><b>genesis supply of 500.</b> the first and only genesis run — every grail is a founding proof-of-human badge on base.</div></li>
+        <li><span class="pip"><span>◆</span></span><div><b>held, not staked.</b> your nft never leaves your wallet. holding it is what unlocks the daily check-in.</div></li>
+        <li><span class="pip"><span>Ξ</span></span><div><b>launched via vibestarter.</b> minting and distribution run through the vibestarter launch flow on base.</div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="ethos">
+  <div class="wrap">
+    <div class="ethos-grid">
+      <div class="ethos-copy reveal">
+        <div class="deco-rule" style="justify-content:flex-start"><span class="eyebrow">sybil resistance</span></div>
+        <h2>Ethos Network, Under the Hood</h2>
+        <p>bots farm mints. sybils split wallets. nanograil leans on <b>ethos network reputation</b> to tell the difference before rewards ever move.</p>
+        <p>reputation signals — vouches, reviews, onchain credibility — feed a score that gates the protocol. <b>high-rep humans check in and earn.</b> low-rep sybil clusters get filtered out of the reward pool.</p>
+        <p style="font-family:var(--mono);font-size:.66rem;color:var(--bone-dim);letter-spacing:.08em">one human, one grail, one daily claim. that's the whole thesis.</p>
+      </div>
+      <div class="rep-panel reveal">
+        <div class="rep-head"><span>reputation gate · sample</span><span>ethos score</span></div>
+        <div class="rep-row"><span class="who">0x7a3f…c21e</span><span class="score">1,847</span><span class="tag">human ✓</span></div>
+        <div class="rep-row"><span class="who">0xb90d…44aa</span><span class="score">1,632</span><span class="tag">human ✓</span></div>
+        <div class="rep-row"><span class="who">0x11f2…9d03</span><span class="score">1,204</span><span class="tag">human ✓</span></div>
+        <div class="rep-row"><span class="who">0xdead…0666</span><span class="score">88</span><span class="tag bot">sybil ✕</span></div>
+        <div class="rep-row"><span class="who">0x0000…b07b</span><span class="score">12</span><span class="tag bot">sybil ✕</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="nano" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="deco-rule"><span class="eyebrow">the token</span></div>
+      <h2>$NANO Powers the Protocol</h2>
+      <p>every action inside nanograil runs on $nano — earned by showing up, spent on using the protocol.</p>
+    </div>
+    <div class="nano-grid">
+      <div class="nano-card reveal"><div class="g">◆</div><h4>daily rewards</h4><p>holders claim $nano with each daily check-in. show up, get paid.</p></div>
+      <div class="nano-card reveal"><div class="g">◇</div><h4>protocol access</h4><p>$nano powers protocol use — reputation queries, verifications, and future features.</p></div>
+      <div class="nano-card reveal"><div class="g">✦</div><h4>forfeit pressure</h4><p>missed check-ins mean unclaimed rewards — steady pressure that favors consistent humans.</p></div>
+      <div class="nano-card reveal"><div class="g">✧</div><h4>base native</h4><p>$nano lives on base — fast, cheap, and where the collection calls home.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap reveal">
+    <div class="deco-rule"><span class="eyebrow">genesis · 500 · base</span></div>
+    <h2>Prove You're Human.<br>Every Single Day.</h2>
+    <p>mint a grail, keep it in your wallet, and let your streak speak for you.</p>
+    <button class="btn solid" style="padding:15px 38px;font-size:.8rem" id="mintCta">mint your grail</button>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div class="logo" style="gap:10px">
+      <svg viewBox="0 0 48 48" fill="none" style="width:26px;height:26px" aria-hidden="true">
+        <circle cx="24" cy="24" r="22" stroke="#C9A15C" stroke-width="1.5"/>
+        <path d="M24 6 L28 24 L24 42 L20 24 Z" fill="#EBCB84"/>
+        <path d="M6 24 L24 20 L42 24 L24 28 Z" fill="#C9A15C" opacity=".7"/>
+      </svg>
+      <span class="fine">NANOGRAIL · built on base · powered by vibestarter · sybil resistance by ethos network</span>
+    </div>
+    <div class="foot-links">
+      <a href="#" onclick="return false">x / twitter</a>
+      <a href="#" onclick="return false">basescan</a>
+      <a href="#" onclick="return false">docs</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ---------- mock live mint data ---------- */
+const collections = [
+  ['gm ghosts','base'],['onchain relics','base'],['pixel pilgrims','zora'],
+  ['base botanica','base'],['cryptid club','eth'],['night runners','arbitrum'],
+  ['deco dials','base'],['halo hounds','polygon'],['silent syndicate','eth'],
+  ['mint monks','base'],['orbit owls','zora'],['ledger lions','base'],
+  ['proof parade','base'],['wander wolves','eth'],['static saints','base']
+];
+const rand = n => Math.floor(Math.random()*n);
+const wallet = () => '0x'+Array.from({length:4},()=>'0123456789abcdef'[rand(16)]).join('')+'…'+Array.from({length:4},()=>'0123456789abcdef'[rand(16)]).join('');
+
+/* ticker */
+const tick = () => {
+  const [name,chain] = collections[rand(collections.length)];
+  return `<span class="tick"><b>${name}</b> #${1000+rand(9000)} minted <span class="chain">· ${chain}</span></span>`;
+};
+const tickerTrack = document.getElementById('tickerTrack');
+let tickHTML = '';
+for(let i=0;i<14;i++) tickHTML += tick();
+tickerTrack.innerHTML = tickHTML + tickHTML; /* duplicate for seamless loop */
+
+/* live feed rows */
+const feedList = document.getElementById('feedList');
+const glyphs = ['◆','◇','✦','✧','◈','⬖'];
+function addFeedRow(initial){
+  const [name,chain] = collections[rand(collections.length)];
+  const li = document.createElement('li');
+  li.className = 'feed-row';
+  li.innerHTML = `
+    <div class="glyph">${glyphs[rand(glyphs.length)]}</div>
+    <div class="meta"><b>${name} #${1000+rand(9000)}</b><span>${wallet()} · ${chain}</span></div>
+    <div class="when">${initial ? (1+rand(9))+'m ago' : ''}<em>${initial ? '' : 'just now'}</em></div>`;
+  feedList.prepend(li);
+  while(feedList.children.length > 8) feedList.removeChild(feedList.lastChild);
+}
+for(let i=0;i<8;i++) addFeedRow(true);
+
+let mintsToday = 12480 + rand(400);
+let wallets = 8912 + rand(200);
+let bots = 3105 + rand(120);
+const fmt = n => n.toLocaleString('en-US');
+function paintStats(){
+  document.getElementById('statMints').textContent = fmt(mintsToday);
+  document.getElementById('statWallets').textContent = fmt(wallets);
+  document.getElementById('statBots').textContent = fmt(bots);
+}
+paintStats();
+
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(!reduced){
+  setInterval(()=>{
+    addFeedRow(false);
+    mintsToday += 1+rand(4);
+    if(Math.random()>.5) wallets += 1;
+    if(Math.random()>.7) bots += 1;
+    paintStats();
+  }, 3800);
+}
+
+/* ---------- check-in demo ---------- */
+const days = ['mon','tue','wed','thu','fri','sat','sun'];
+/* state: claimed, claimed, missed, claimed, claimed, today, future */
+const state = ['claimed','claimed','missed','claimed','claimed','today','future'];
+const marks = {claimed:'◆', missed:'✕', today:'○', future:'·'};
+const weekGrid = document.getElementById('weekGrid');
+function paintWeek(){
+  weekGrid.innerHTML = '';
+  state.forEach((s,i)=>{
+    const d = document.createElement('div');
+    d.className = 'day '+s;
+    d.innerHTML = `<span class="d-lab">${days[i]}</span><span class="d-mark">${marks[s]}</span>`;
+    weekGrid.appendChild(d);
+  });
+}
+paintWeek();
+
+let bal = 62.5, streak = 3;
+const balEl = document.getElementById('nanoBal');
+const streakLab = document.getElementById('streakLab');
+const btn = document.getElementById('checkinBtn');
+const flash = document.getElementById('claimFlash');
+btn.addEventListener('click', ()=>{
+  const idx = state.indexOf('today');
+  if(idx === -1) return;
+  state[idx] = 'claimed';
+  marks.claimed = '◆';
+  paintWeek();
+  bal += 12.5; streak += 1;
+  balEl.textContent = bal.toFixed(1);
+  streakLab.textContent = `◆ ${streak}-day streak`;
+  btn.disabled = true;
+  btn.textContent = 'checked in · come back tomorrow';
+  flash.classList.add('show');
+  setTimeout(()=>flash.classList.remove('show'), 2200);
+});
+
+/* ---------- genesis counter ---------- */
+const TARGET = 173;
+const mintCount = document.getElementById('mintCount');
+const barFill = document.getElementById('barFill');
+const barPct = document.getElementById('barPct');
+let counted = false;
+function runCounter(){
+  if(counted) return; counted = true;
+  barFill.style.width = (TARGET/500*100)+'%';
+  if(reduced){
+    mintCount.textContent = TARGET;
+    barPct.textContent = Math.round(TARGET/500*100)+'%';
+    return;
+  }
+  const t0 = performance.now(), dur = 1600;
+  function step(t){
+    const p = Math.min(1,(t-t0)/dur);
+    const eased = 1-Math.pow(1-p,3);
+    const v = Math.round(TARGET*eased);
+    mintCount.textContent = v;
+    barPct.textContent = Math.round(v/500*100)+'%';
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ---------- reveal on scroll ---------- */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      if(e.target.closest('#genesis')) runCounter();
+      io.unobserve(e.target);
+    }
+  });
+},{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+if(reduced) document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+
+/* mock wallet connect */
+const connectBtn = document.getElementById('connectBtn');
+connectBtn.addEventListener('click', ()=>{
+  connectBtn.textContent = wallet();
+  connectBtn.disabled = true;
+  connectBtn.style.color = 'var(--verify)';
+  connectBtn.style.borderColor = 'var(--verify)';
+});
+document.getElementById('mintCta').addEventListener('click', ()=>{
+  document.getElementById('genesis').scrollIntoView({behavior: reduced ? 'auto' : 'smooth'});
+});
+</script>
+</body>
+</html>
